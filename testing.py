@@ -1,4 +1,5 @@
 from transaction import Transaction
+from transactionpool import TransactionPool
 from wallet import Wallet
 if __name__ == '__main__':
     
@@ -7,14 +8,24 @@ if __name__ == '__main__':
     amount = 1
     TYPE = 'TRANSFER'
     # transaction information gets instantiated, 
-    transaction = Transaction(sender, receiver, amount, TYPE)
-    # wallet object is instantiated
-    wallet = Wallet()
-    # wallet object then takes the transaction dictionary, converts it using sha and pkcs1_v5
-    signature = wallet.sign(transaction.toJson())
-    # and then stores this signature in the transaction signature attribute
-    if wallet.signaturevalid(transaction.toJson(), signature, wallet.publicKeyString())==True:
-        print('valid')
-        transaction.sign(signature)
+    pool = TransactionPool()
+    wallet =  Wallet()
+    fake_wallet = Wallet()
+    
+    transaction = wallet.create_transaction(receiver, amount, TYPE)
+                
+    # this is testing if the thing is valid for the trade purposes, it will not affect what is stored in the transactionpool
+    validsign = wallet.signaturevalid(transaction.payload(), transaction.signature, wallet.publicKeyString())
+    print(validsign)
+    validsign2 = wallet.signaturevalid(transaction.payload(), transaction.signature, fake_wallet.publicKeyString())
+    print(validsign2)
+    if pool.transactionExists(transaction)==False:
+        pool.add_transaction(transaction)
+    
+    print(pool.transactions)
+    
+    
+
+
     
 

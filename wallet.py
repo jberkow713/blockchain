@@ -3,8 +3,8 @@ from Crypto.PublicKey import RSA
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA256
 import uuid
-
 from Blockchainutils import BlockchainUtils
+from transaction import Transaction
 
 class Wallet():
     def __init__(self):
@@ -36,6 +36,13 @@ class Wallet():
         # pull out the public key from the key pair to insert into the above function
         publicKeyString = self.keyPair.publickey().exportKey('PEM').decode('utf-8')
         return publicKeyString
+    def create_transaction(self, receiver, amount, type):
+        # return an instance of newly created transaction, with whoever sent the transaction as the 'owner'
+        transaction = Transaction(self.publicKeyString(), receiver, amount, type)
+        signature = self.sign(transaction.toJson())
+        # transaction takes the hex signature and adds it to its instance dictionary
+        transaction.sign(signature)
+        return transaction
 
 
 
