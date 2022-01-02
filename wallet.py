@@ -20,19 +20,26 @@ class Wallet():
     
     @staticmethod
     def signaturevalid(data,signature, publicKeyString):
+        # back to bytes
         signature = bytes.fromhex(signature)
+        # sha256object
         datahash = BlockchainUtils.hash(data)
+        # the public key part of the keypair
         publicKey = RSA.importKey(publicKeyString)
+        # some kind of signature object using the public key
         signatureSchemeObject = PKCS1_v1_5.new(publicKey)
+        # use the public key object along with the hashed data and hex signature to verify if they match each other
         signatureValid = signatureSchemeObject.verify(datahash, signature)
         return signatureValid
 
     def publicKeyString(self):
+        # pull out the public key from the key pair to insert into the above function
         publicKeyString = self.keyPair.publickey().exportKey('PEM').decode('utf-8')
         return publicKeyString
 
-# this is how it works
 
+
+# this is how it works
 # t = 'hello i am a pizza what are you???'
 # t1 = t.encode('utf-8')
 # t2 = SHA256.new(t1)
