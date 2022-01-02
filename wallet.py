@@ -5,6 +5,7 @@ from Crypto.Hash import SHA256
 import uuid
 from Blockchainutils import BlockchainUtils
 from transaction import Transaction
+from block import Block
 
 class Wallet():
     def __init__(self):
@@ -43,6 +44,14 @@ class Wallet():
         # transaction takes the hex signature and adds it to its instance dictionary
         transaction.sign(signature)
         return transaction
+
+    def create_block(self, transactions, lastHash, blockCount):
+        block = Block(transactions, lastHash, self.publicKeyString(), blockCount)
+        signature = self.sign(block.payload())
+        block.sign(signature)
+        return block 
+
+
 
 
 
