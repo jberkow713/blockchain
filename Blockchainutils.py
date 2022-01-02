@@ -2,10 +2,14 @@ from Crypto.Hash import SHA256
 import json
 
 class BlockchainUtils():
-
+    # method used to create hash key using the Sha256 algorithm, data will be fed in from outside classes
     @staticmethod
     def hash(data):
+        
         datastring = json.dumps(data)
+        
         databytes = datastring.encode('utf-8')
+        
         datahash = SHA256.new(databytes)
         return datahash
+
