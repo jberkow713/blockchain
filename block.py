@@ -1,7 +1,8 @@
 
 import time
 import json
-import copy  
+import copy
+
 class Block():
 
     def __init__(self, transactions, lastHash, forger, blockCount):
@@ -11,6 +12,12 @@ class Block():
         self.blockCount = blockCount
         self.timestamp = time.time()
         self.signature = ''
+
+    @staticmethod
+    def genesis():
+        genesisBlock = Block([], 'genesisHash', 'genesis', 0)
+        genesisBlock.timestamp = 0
+        return genesisBlock    
 
     def toJson(self):
         d = {}

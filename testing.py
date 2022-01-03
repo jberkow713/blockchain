@@ -1,8 +1,11 @@
+from Blockchainutils import BlockchainUtils
 from transaction import Transaction
 from transactionpool import TransactionPool
 from wallet import Wallet
 from block import Block
+from blockchain import Blockchain
 import pprint
+
 if __name__ == '__main__':
     
     sender = 'sender'
@@ -19,19 +22,25 @@ if __name__ == '__main__':
     if pool.transactionExists(transaction)==False:
         pool.add_transaction(transaction)
     
-    block = wallet.create_block(pool.transactions, 'lasthash', 1)
-    validsignature = wallet.signaturevalid(block.payload(), block.signature, wallet.publicKeyString())
+    blockchain = Blockchain()
+    # in creating a new block, we take the hash from the previous block and hash it
+    # creates simple loop to test functionality using last blocks count and hash as verification
+    for _ in range(3):
 
-    print(validsignature)
+        lastHash = BlockchainUtils.hash(blockchain.blocks[-1].payload()).hexdigest()
+        blockCount = blockchain.blocks[-1].blockCount+1
+
+        block = wallet.create_block(pool.transactions, lastHash, blockCount)
+        
+        blockchain.VERIFY(block)
+        
+        
+      
+    
+    pprint.pprint(blockchain.to_json())
     # pprint.pprint(block.toJson())
 
-    # this is testing if the thing is valid for the trade purposes, it will not affect what is stored in the transactionpool
-    # validsign = wallet.signaturevalid(transaction.payload(), transaction.signature, wallet.publicKeyString())
-    # print(validsign)
-    # validsign2 = wallet.signaturevalid(transaction.payload(), transaction.signature, fake_wallet.publicKeyString())
-    # print(validsign2)
-        
-    # print(pool.transactions)
+    
     
     
 
