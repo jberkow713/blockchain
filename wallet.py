@@ -47,6 +47,9 @@ class Wallet():
 
     def create_block(self, transactions, lastHash, blockCount):
         block = Block(transactions, lastHash, self.publicKeyString(), blockCount)
+        # takes in payload which comes from the list of transactions to create a json object,
+        # this is fed into the sign method as the data to get a key
+        # this key is now the blocks signature
         signature = self.sign(block.payload())
         block.sign(signature)
         return block 

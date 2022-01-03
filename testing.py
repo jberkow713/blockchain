@@ -4,41 +4,30 @@ from transactionpool import TransactionPool
 from wallet import Wallet
 from block import Block
 from blockchain import Blockchain
+from accountmodel import accountmodel
 import pprint
 
 if __name__ == '__main__':
     
-    sender = 'sender'
-    receiver = 'receiver'
-    amount = 1
-    TYPE = 'TRANSFER'
-    # transaction information gets instantiated, 
-    pool = TransactionPool()
-    wallet =  Wallet()
-    fake_wallet = Wallet()
-    
-    transaction = wallet.create_transaction(receiver, amount, TYPE)
-
-    if pool.transactionExists(transaction)==False:
-        pool.add_transaction(transaction)
-    
     blockchain = Blockchain()
-    # in creating a new block, we take the hash from the previous block and hash it
-    # creates simple loop to test functionality using last blocks count and hash as verification
-    for _ in range(3):
+    pool = TransactionPool()
 
-        lastHash = BlockchainUtils.hash(blockchain.blocks[-1].payload()).hexdigest()
-        blockCount = blockchain.blocks[-1].blockCount+1
+    Alice = Wallet()
+    Bob = Wallet()
+    Exchange = Wallet()
 
-        block = wallet.create_block(pool.transactions, lastHash, blockCount)
-        
-        blockchain.VERIFY(block)
-        
-        
+    Exchange_transaction = Exchange.create_transaction(Alice.publicKeyString(), 10, 'Exchange')
+    transaction = Alice.create_transaction(Bob.publicKeyString(), 5, 'transfer')
+
+    pool.add_transaction(Exchange_transaction)
+    pool.add_transaction(transaction)
+    # pool.show_transactions()
+
+    covered_transactions = blockchain.getCoveredTransactionSet(pool.transactions)
+    print(covered_transactions)
       
     
-    pprint.pprint(blockchain.to_json())
-    # pprint.pprint(block.toJson())
+    
 
     
     
