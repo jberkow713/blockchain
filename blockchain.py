@@ -10,6 +10,7 @@ class Blockchain():
         self.accountModel = accountmodel()
 
     def add_block(self, block):
+        self.executeTransactions(block.transactions)
         self.blocks.append(block)
 
     def to_json(self):
@@ -50,7 +51,7 @@ class Blockchain():
     
     def transactionCovered(self, transaction):
         
-        if transaction.type == 'Exchange':
+        if transaction.type_ == 'Exchange':
             return True
         
         senderbalance = self.accountModel.get_balance(transaction.senderPublicKey)
@@ -66,6 +67,18 @@ class Blockchain():
                 covered_transactions.append(transaction)
             else:
                 print('transaction is not covered by sender')
-        return covered_transactions            
+                print(transaction.type_)
+        return covered_transactions  
+
+    def executeTransaction(self, transaction):
+        sender = transaction.senderPublicKey
+        receiver = transaction.receiverPublicKey
+        amount = transaction.amount
+        self.accountModel.update_balance(sender,-amount)
+        self.accountModel.update_balance(receiver, amount)
+
+    def executeTransactions(self, transactions):
+        for transaction in transactions:
+            self.executeTransaction(transaction)                  
     
 

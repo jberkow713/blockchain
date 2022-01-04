@@ -37,6 +37,7 @@ class Wallet():
         # pull out the public key from the key pair to insert into the above function
         publicKeyString = self.keyPair.publickey().exportKey('PEM').decode('utf-8')
         return publicKeyString
+    
     def create_transaction(self, receiver, amount, type):
         # return an instance of newly created transaction, with whoever sent the transaction as the 'owner'
         transaction = Transaction(self.publicKeyString(), receiver, amount, type)

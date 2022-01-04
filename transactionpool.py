@@ -15,6 +15,13 @@ class TransactionPool:
     def add_transaction(self, transaction):
         if self.transactionExists(transaction)==False:
             self.transactions.append(transaction)
+    
+    def remove_from_pool(self, transactions):
+        new_transactions = []
+        for transaction in transactions:
+            if self.transactionExists(transaction)==False:
+                new_transactions.append(transaction)
+        self.transactions=new_transactions        
 
     def show_transactions(self):
         for transaction in self.transactions:

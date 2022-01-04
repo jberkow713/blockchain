@@ -9,7 +9,7 @@ class Transaction():
         self.senderPublicKey=senderPublicKey
         self.receiverPublicKey=receiverPublicKey
         self.amount = amount
-        self.type = type_ 
+        self.type_ = type_ 
         # generates random hex value for self.id, globally unique
         self.id = uuid.uuid1().hex
         self.timestamp = time.time()
